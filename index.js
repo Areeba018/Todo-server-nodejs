@@ -6,8 +6,15 @@ const bcrypt = require('bcryptjs');
 const path = require('path');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://your-frontend-domain.vercel.app'] 
+    : ['http://localhost:3000'],
+  credentials: true
+}));
 app.use(express.json());
+
+require('dotenv').config();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'my_super_secret_key_12345';
 const DB_PATH = path.join(__dirname, 'todo_app.db');
